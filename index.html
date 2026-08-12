@@ -1,0 +1,603 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A conceptual model of how California Water Boards Regions, Divisions, and OIMA share responsibility for harmful algal blooms.">
+<title>HABs across the CA Water Boards — a shared-jurisdiction model</title>
+<style>
+  :root{
+    /* cool, water-biased neutrals */
+    --bg:#f5f8f8;
+    --surface:#ffffff;
+    --surface-2:#eef3f3;
+    --ink:#16211f;
+    --ink-2:#43514e;
+    --ink-3:#6c7a76;
+    --line:#d7e0de;
+    --line-2:#c2cecb;
+    --accent:#0f766e;
+
+    /* five players — distinct hues, redundant with labels */
+    --e-region:#1f7a6b;   /* Regional Boards — teal-green */
+    --e-rights:#b57a1e;   /* Water Rights — ochre */
+    --e-dw:#2c6db0;       /* Drinking Water — blue */
+    --e-wq:#7350b8;       /* Water Quality — violet */
+    --e-oima:#c13a76;     /* OIMA — rose */
+
+    --warn:#c2410c;
+    --on:#ffffff;   /* text on a solid entity color */
+    --radius:14px;
+    --font-sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --font-serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+    --font-mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --shadow:0 1px 2px rgba(20,40,38,.06),0 8px 28px rgba(20,40,38,.06);
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --bg:#0c1413;
+      --surface:#121e1c;
+      --surface-2:#182726;
+      --ink:#e7eeec;
+      --ink-2:#aebbb8;
+      --ink-3:#7f8f8b;
+      --line:#25332f;
+      --line-2:#324540;
+      --accent:#5ec6b3;
+      --e-region:#4fc2ac;
+      --e-rights:#e0a94a;
+      --e-dw:#6ba8e6;
+      --e-wq:#b29ae8;
+      --e-oima:#ec7bac;
+      --warn:#f08a4b;
+      --on:#0c1413;
+      --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 32px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0c1413;
+    --surface:#121e1c;
+    --surface-2:#182726;
+    --ink:#e7eeec;
+    --ink-2:#aebbb8;
+    --ink-3:#7f8f8b;
+    --line:#25332f;
+    --line-2:#324540;
+    --accent:#5ec6b3;
+    --e-region:#4fc2ac;
+    --e-rights:#e0a94a;
+    --e-dw:#6ba8e6;
+    --e-wq:#b29ae8;
+    --e-oima:#ec7bac;
+    --warn:#f08a4b;
+    --on:#0c1413;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 32px rgba(0,0,0,.35);
+  }
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:var(--font-sans);line-height:1.55;
+    font-size:17px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+  section{padding:38px 0}
+  .eyebrow{
+    font-family:var(--font-mono);text-transform:uppercase;
+    letter-spacing:.16em;font-size:11.5px;color:var(--ink-3);
+    margin:0 0 10px;
+  }
+  h1{
+    font-size:clamp(30px,5.4vw,50px);line-height:1.04;
+    letter-spacing:-.022em;font-weight:800;margin:.1em 0 .28em;
+    text-wrap:balance;
+  }
+  h2{
+    font-size:clamp(21px,3.2vw,29px);line-height:1.12;
+    letter-spacing:-.018em;font-weight:750;margin:.1em 0 .35em;
+    text-wrap:balance;
+  }
+  h2 .num{color:var(--ink-3);font-variant-numeric:tabular-nums;font-weight:600;margin-right:.5em}
+  p{margin:0 0 1em;color:var(--ink-2);max-width:68ch}
+  .lead{font-size:19px;color:var(--ink);max-width:64ch}
+  .thesis{
+    font-family:var(--font-serif);font-style:italic;
+    font-size:clamp(20px,3vw,27px);line-height:1.3;color:var(--ink);
+    max-width:26ch;margin:.2em 0 0;font-weight:500;
+  }
+  .thesis b{font-style:normal;font-weight:600;color:var(--accent)}
+  figure{margin:0}
+  figcaption{
+    font-size:14px;color:var(--ink-3);margin-top:14px;max-width:80ch;
+  }
+  figcaption b{color:var(--ink-2);font-weight:600}
+  .panel{
+    background:var(--surface);border:1px solid var(--line);
+    border-radius:var(--radius);box-shadow:var(--shadow);
+    padding:26px;
+  }
+  .rule{height:1px;background:var(--line);border:0;margin:0}
+
+  /* hero */
+  header.hero{padding:64px 0 30px;border-bottom:1px solid var(--line)}
+  .hero-grid{display:grid;grid-template-columns:1.35fr 1fr;gap:34px;align-items:end}
+  @media(max-width:760px){.hero-grid{grid-template-columns:1fr;gap:18px}}
+  .howto{
+    display:grid;grid-template-columns:1fr 1fr;gap:10px 18px;margin-top:26px;
+    border-top:1px solid var(--line);padding-top:20px;
+  }
+  @media(max-width:520px){.howto{grid-template-columns:1fr}}
+  .howto .step{display:flex;gap:11px;align-items:baseline}
+  .howto .k{font-family:var(--font-mono);font-size:12px;color:var(--accent);font-weight:600}
+  .howto .t{font-size:14.5px;color:var(--ink-2)}
+  .howto .t b{color:var(--ink);font-weight:650}
+
+  /* five players */
+  .players{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+  @media(max-width:900px){.players{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:520px){.players{grid-template-columns:1fr}}
+  .pc{
+    background:var(--surface);border:1px solid var(--line);border-radius:12px;
+    padding:16px 15px;border-top:4px solid var(--c);position:relative;
+    box-shadow:var(--shadow);
+  }
+  .pc .dot{width:11px;height:11px;border-radius:50%;background:var(--c);display:inline-block;margin-right:7px;vertical-align:-1px}
+  .pc .nm{font-weight:700;font-size:15.5px;letter-spacing:-.01em;line-height:1.15;display:block;margin-bottom:8px}
+  .pc .lever{font-family:var(--font-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.09em;color:var(--c);font-weight:600;display:block;margin-bottom:6px}
+  .pc .role{font-size:13.5px;color:var(--ink-2);line-height:1.4}
+  .pc .role b{color:var(--ink);font-weight:600}
+
+  /* svg block */
+  .figwrap{overflow-x:auto}
+  svg{max-width:100%;height:auto;display:block;color:var(--ink)}
+  svg text{font-family:var(--font-sans)}
+
+  /* matrix */
+  .matrix{overflow-x:auto}
+  .mtable{min-width:640px;width:100%;border-collapse:separate;border-spacing:0}
+  .mtable th,.mtable td{padding:11px 10px;text-align:center;border-bottom:1px solid var(--line)}
+  .mtable thead th{
+    font-family:var(--font-mono);font-size:11px;text-transform:uppercase;letter-spacing:.05em;
+    color:var(--ink-2);font-weight:600;vertical-align:bottom;border-bottom:2px solid var(--line-2);
+    line-height:1.25;
+  }
+  .mtable thead th span{display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--c);margin-bottom:5px}
+  .mtable tbody th{
+    text-align:left;font-weight:650;font-size:14px;color:var(--ink);
+    border-bottom:1px solid var(--line);padding-right:14px;white-space:nowrap;
+  }
+  .mtable tbody th small{display:block;font-weight:500;color:var(--ink-3);font-family:var(--font-sans);text-transform:none;letter-spacing:0;font-size:12px;white-space:normal}
+  .mk{display:inline-block;width:16px;height:16px;border-radius:50%}
+  .mk.lead{background:var(--c)}
+  .mk.sup{background:transparent;box-shadow:inset 0 0 0 2.5px var(--c)}
+  .mtable tbody tr:hover td{background:var(--surface-2)}
+  .mkey{display:flex;gap:22px;flex-wrap:wrap;margin-top:16px;font-size:13px;color:var(--ink-2);align-items:center}
+  .mkey .mk{margin-right:7px;--c:var(--ink-3);vertical-align:-3px}
+
+  /* place strip */
+  .places{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px}
+  @media(max-width:760px){.places{grid-template-columns:1fr}}
+  .place{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:16px}
+  .place h3{margin:0 0 4px;font-size:16px;letter-spacing:-.01em}
+  .place .sub{font-size:12.5px;color:var(--ink-3);margin:0 0 12px}
+  .place .who{display:flex;gap:6px;flex-wrap:wrap}
+  .tag{font-size:11px;font-family:var(--font-mono);font-weight:600;padding:3px 8px;border-radius:20px;color:var(--on);background:var(--c);letter-spacing:.02em;white-space:nowrap}
+  .place p.note{font-size:12.5px;margin:11px 0 0;color:var(--ink-2)}
+
+  /* fresh vs marine */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:760px){.split{grid-template-columns:1fr}}
+  .env{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+  .env .cap{padding:14px 18px;color:var(--on);font-weight:700;font-size:16px;letter-spacing:-.01em}
+  .env.fresh .cap{background:var(--e-region)}
+  .env.marine .cap{background:var(--e-dw)}
+  .env dl{margin:0;padding:16px 18px}
+  .env dt{font-family:var(--font-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-3);margin-top:12px}
+  .env dt:first-child{margin-top:0}
+  .env dd{margin:3px 0 0;font-size:14px;color:var(--ink)}
+  .env dd b{font-weight:600}
+
+  footer{border-top:1px solid var(--line);padding:30px 0 60px;color:var(--ink-3);font-size:13.5px}
+  footer p{color:var(--ink-3);max-width:80ch}
+  footer b{color:var(--ink-2)}
+  a{color:var(--accent)}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">California Water Boards · Conceptual model · v1 draft</p>
+    <div class="hero-grid">
+      <div>
+        <h1>One bloom, many jurisdictions</h1>
+        <p class="lead">Harmful algal blooms don't respect the org chart. Because a HAB is a <em>condition</em> rather than a discharged pollutant, no single office owns it — the response is stitched together from the levers each Region, Division, and Office already holds.</p>
+      </div>
+      <p class="thesis">A HAB is not a pollutant you can permit away — it's an outcome you reach by pulling on <b>flow, nutrients, and temperature</b>, then watching what happens.</p>
+    </div>
+    <div class="howto">
+      <div class="step"><span class="k">01</span><span class="t"><b>Who holds which lever</b> — the five players, color-coded. Carry these colors through every panel.</span></div>
+      <div class="step"><span class="k">02</span><span class="t"><b>The causal chain</b> — the drivers we can influence, the bloom, and the four ways people get hurt.</span></div>
+      <div class="step"><span class="k">03</span><span class="t"><b>Who leads, who supports</b> — a matrix crossing exposure pathway against office.</span></div>
+      <div class="step"><span class="k">04</span><span class="t"><b>The reservoir</b> — one place where all five converge at once.</span></div>
+      <div class="step"><span class="k">05</span><span class="t"><b>Fresh vs. marine</b> — why the seafood pathway has different culprits and different lead agencies.</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- 1 · FIVE PLAYERS -->
+<section class="wrap">
+  <p class="eyebrow">Panel 1 · The cast</p>
+  <h2><span class="num">01</span>Five players, five levers</h2>
+  <p>Each entity brings one distinct instrument to a HAB. None of them is a "HAB program" on its own — the program is what emerges when the levers are used together on the same waterbody.</p>
+  <div class="players">
+    <div class="pc" style="--c:var(--e-region)">
+      <span class="nm"><span class="dot"></span>Regional Water Boards</span>
+      <span class="lever">Place-based lead</span>
+      <span class="role">Own water-quality protection through <b>Basin Plans, beneficial uses &amp; objectives</b>. HABs force them past classic pollutant tools into monitoring &amp; linkage.</span>
+    </div>
+    <div class="pc" style="--c:var(--e-rights)">
+      <span class="nm"><span class="dot"></span>Division of Water Rights</span>
+      <span class="lever">Flow</span>
+      <span class="role">Sets <b>water rights, use &amp; minimum-flow standards</b> — and can drive monitoring. Flow &amp; residence time are upstream of nearly every bloom.</span>
+    </div>
+    <div class="pc" style="--c:var(--e-dw)">
+      <span class="nm"><span class="dot"></span>Division of Drinking Water</span>
+      <span class="lever">The tap</span>
+      <span class="role">Partners with <b>thousands of local water systems</b> to keep tap water safe — the front line when a toxin reaches a source or intake.</span>
+    </div>
+    <div class="pc" style="--c:var(--e-wq)">
+      <span class="nm"><span class="dot"></span>Division of Water Quality</span>
+      <span class="lever">The rulebook</span>
+      <span class="role">Builds the regulatory tools — <b>standards, objectives &amp; prohibitions</b> — that Regions and (in the Delta) Water Rights use to protect waters.</span>
+    </div>
+    <div class="pc" style="--c:var(--e-oima)">
+      <span class="nm"><span class="dot"></span>OIMA</span>
+      <span class="lever">Eyes &amp; alarm</span>
+      <span class="role">Leads statewide HAB monitoring — <b>coordinates partners to sample, confirm &amp; notify the public</b> about the risk of recreating in or near a bloom.</span>
+    </div>
+  </div>
+</section>
+
+<hr class="rule"/>
+
+<!-- 2 · CAUSAL CHAIN -->
+<section class="wrap">
+  <p class="eyebrow">Panel 2 · The mechanism</p>
+  <h2><span class="num">02</span>From the levers we can pull to the harm people feel</h2>
+  <p>A HAB isn't dumped into the water — it grows when conditions allow. Those conditions trace back to things the Boards actually influence: how much water moves, how many nutrients arrive, and how warm and stagnant the water gets. That's why HABs demand monitoring to <em>link</em> drivers to blooms, rather than a single discharge permit.</p>
+  <div class="figwrap panel" style="padding:22px 18px">
+  <figure>
+    <svg viewBox="0 0 1120 560" role="img" aria-label="Causal chain: drivers we can influence (flow, nutrients, warming) fuel a HAB, which produces toxins and creates four exposure pathways — recreation, drinking water, cultural and subsistence use, and food and seafood. OIMA and partners monitor to link drivers to blooms.">
+      <defs>
+        <marker id="ah" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/>
+        </marker>
+        <marker id="ahb" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--e-oima)"/>
+        </marker>
+      </defs>
+
+      <!-- column headers -->
+      <text x="175" y="30" text-anchor="middle" fill="var(--ink-3)" font-family="var(--font-mono)" font-size="12" letter-spacing="1.5">WHAT WE CAN INFLUENCE</text>
+      <text x="580" y="30" text-anchor="middle" fill="var(--ink-3)" font-family="var(--font-mono)" font-size="12" letter-spacing="1.5">THE BLOOM</text>
+      <text x="965" y="30" text-anchor="middle" fill="var(--ink-3)" font-family="var(--font-mono)" font-size="12" letter-spacing="1.5">HOW PEOPLE ARE HARMED</text>
+
+      <!-- driver boxes -->
+      <g>
+        <rect x="40" y="60" width="270" height="108" rx="11" fill="var(--surface-2)" stroke="var(--line-2)"/>
+        <text x="60" y="92" fill="var(--ink)" font-size="17" font-weight="700">Water extraction &amp; flow</text>
+        <text x="60" y="114" fill="var(--ink-2)" font-size="13">diversions · reservoir ops · Delta flow</text>
+        <rect x="60" y="128" width="120" height="22" rx="11" fill="var(--e-rights)"/>
+        <text x="120" y="143" text-anchor="middle" fill="var(--on)" font-size="11" font-weight="700" font-family="var(--font-mono)">WATER RIGHTS</text>
+      </g>
+      <g>
+        <rect x="40" y="226" width="270" height="108" rx="11" fill="var(--surface-2)" stroke="var(--line-2)"/>
+        <text x="60" y="258" fill="var(--ink)" font-size="17" font-weight="700">Nutrient loading</text>
+        <text x="60" y="280" fill="var(--ink-2)" font-size="13">runoff · discharges · legacy load</text>
+        <rect x="60" y="294" width="100" height="22" rx="11" fill="var(--e-region)"/>
+        <text x="110" y="309" text-anchor="middle" fill="var(--on)" font-size="11" font-weight="700" font-family="var(--font-mono)">REGIONS</text>
+        <rect x="166" y="294" width="120" height="22" rx="11" fill="var(--e-wq)"/>
+        <text x="226" y="309" text-anchor="middle" fill="var(--on)" font-size="11" font-weight="700" font-family="var(--font-mono)">WATER QUALITY</text>
+      </g>
+      <g>
+        <rect x="40" y="392" width="270" height="108" rx="11" fill="var(--surface-2)" stroke="var(--line-2)"/>
+        <text x="60" y="424" fill="var(--ink)" font-size="17" font-weight="700">Warming &amp; residence</text>
+        <text x="60" y="446" fill="var(--ink-2)" font-size="13">less flushing · higher temperatures</text>
+        <rect x="60" y="460" width="120" height="22" rx="11" fill="var(--e-rights)"/>
+        <text x="120" y="475" text-anchor="middle" fill="var(--on)" font-size="11" font-weight="700" font-family="var(--font-mono)">WATER RIGHTS</text>
+        <rect x="186" y="460" width="100" height="22" rx="11" fill="var(--e-region)"/>
+        <text x="236" y="475" text-anchor="middle" fill="var(--on)" font-size="11" font-weight="700" font-family="var(--font-mono)">REGIONS</text>
+      </g>
+
+      <!-- arrows drivers -> bloom -->
+      <line x1="312" y1="114" x2="428" y2="250" stroke="var(--ink-3)" stroke-width="2" marker-end="url(#ah)"/>
+      <line x1="312" y1="280" x2="428" y2="280" stroke="var(--ink-3)" stroke-width="2" marker-end="url(#ah)"/>
+      <line x1="312" y1="446" x2="428" y2="312" stroke="var(--ink-3)" stroke-width="2" marker-end="url(#ah)"/>
+      <text x="372" y="232" text-anchor="middle" fill="var(--ink-3)" font-size="12.5" font-style="italic">fuel &amp; trigger</text>
+
+      <!-- bloom node -->
+      <rect x="432" y="212" width="286" height="146" rx="16" fill="color-mix(in srgb, var(--e-oima) 12%, var(--surface))" stroke="var(--e-oima)" stroke-width="2"/>
+      <text x="575" y="256" text-anchor="middle" fill="var(--ink)" font-size="20" font-weight="800">HAB develops</text>
+      <text x="575" y="282" text-anchor="middle" fill="var(--ink-2)" font-size="13.5">cyanobacteria / algae proliferate</text>
+      <text x="575" y="302" text-anchor="middle" fill="var(--ink-2)" font-size="13.5">and produce toxins</text>
+      <text x="575" y="332" text-anchor="middle" fill="var(--e-oima)" font-size="12.5" font-style="italic">not a classic pollutant</text>
+
+      <!-- OIMA monitoring arrow from below -->
+      <line x1="575" y1="548" x2="575" y2="364" stroke="var(--e-oima)" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#ahb)"/>
+      <rect x="405" y="512" width="340" height="30" rx="15" fill="color-mix(in srgb, var(--e-oima) 14%, var(--surface))" stroke="var(--e-oima)"/>
+      <text x="575" y="532" text-anchor="middle" fill="var(--e-oima)" font-size="12.5" font-weight="700" font-family="var(--font-mono)">OIMA + PARTNERS · MONITOR &amp; CONFIRM</text>
+
+      <!-- arrows bloom -> pathways -->
+      <line x1="720" y1="238" x2="826" y2="96" stroke="var(--ink-3)" stroke-width="2" marker-end="url(#ah)"/>
+      <line x1="720" y1="262" x2="826" y2="226" stroke="var(--ink-3)" stroke-width="2" marker-end="url(#ah)"/>
+      <line x1="720" y1="300" x2="826" y2="356" stroke="var(--ink-3)" stroke-width="2" marker-end="url(#ah)"/>
+      <line x1="720" y1="326" x2="826" y2="486" stroke="var(--ink-3)" stroke-width="2" marker-end="url(#ah)"/>
+      <text x="772" y="238" text-anchor="middle" fill="var(--ink-3)" font-size="12.5" font-style="italic">exposure routes</text>
+
+      <!-- pathway boxes -->
+      <g>
+        <rect x="828" y="42" width="262" height="108" rx="11" fill="var(--surface-2)" stroke="var(--line-2)"/>
+        <text x="848" y="74" fill="var(--ink)" font-size="16.5" font-weight="700">Recreation</text>
+        <text x="848" y="95" fill="var(--ink-2)" font-size="12.5">swim · wade · dogs · shoreline</text>
+        <circle cx="852" cy="122" r="6" fill="var(--e-region)"/><circle cx="872" cy="122" r="6" fill="var(--e-oima)"/>
+      </g>
+      <g>
+        <rect x="828" y="172" width="262" height="108" rx="11" fill="var(--surface-2)" stroke="var(--line-2)"/>
+        <text x="848" y="204" fill="var(--ink)" font-size="16.5" font-weight="700">Drinking water</text>
+        <text x="848" y="225" fill="var(--ink-2)" font-size="12.5">taste · odor · toxins at the tap</text>
+        <circle cx="852" cy="252" r="6" fill="var(--e-dw)"/><circle cx="872" cy="252" r="6" fill="var(--e-region)"/><circle cx="892" cy="252" r="6" fill="var(--e-wq)"/>
+      </g>
+      <g>
+        <rect x="828" y="302" width="262" height="108" rx="11" fill="var(--surface-2)" stroke="var(--line-2)"/>
+        <text x="848" y="334" fill="var(--ink)" font-size="16.5" font-weight="700">Cultural &amp; subsistence</text>
+        <text x="848" y="355" fill="var(--ink-2)" font-size="12.5">ceremony · basketry · gathering</text>
+        <circle cx="852" cy="382" r="6" fill="var(--e-oima)"/><circle cx="872" cy="382" r="6" fill="var(--e-region)"/><circle cx="892" cy="382" r="6" fill="var(--e-wq)"/>
+      </g>
+      <g>
+        <rect x="828" y="432" width="262" height="108" rx="11" fill="var(--surface-2)" stroke="var(--line-2)"/>
+        <text x="848" y="464" fill="var(--ink)" font-size="16.5" font-weight="700">Food &amp; seafood</text>
+        <text x="848" y="485" fill="var(--ink-2)" font-size="12.5">toxins bioaccumulate in tissue</text>
+        <text x="848" y="505" fill="var(--ink-3)" font-size="12" font-style="italic">mostly marine — see Panel 5</text>
+      </g>
+    </svg>
+    <figcaption><b>Read left to right.</b> The three drivers on the left are the only handles the Boards really have; the colored tags name who holds each. They <b>fuel and trigger</b> the bloom, which then opens four <b>exposure routes</b>. The dashed rose arrow is the thread that makes any of it manageable — without OIMA's monitoring, the link between a driver and a bloom is invisible. Colored dots preview who responds to each pathway; Panel 3 spells that out.</figcaption>
+  </figure>
+  </div>
+</section>
+
+<hr class="rule"/>
+
+<!-- 3 · MATRIX -->
+<section class="wrap">
+  <p class="eyebrow">Panel 3 · Who does what</p>
+  <h2><span class="num">03</span>Lead vs. support, by exposure pathway</h2>
+  <p>The same event lands on different desks depending on how people are exposed. Filled dots are the <b>lead</b>; rings are a <b>supporting</b> role. Read across a row to see how many hands touch a single pathway.</p>
+  <div class="panel matrix">
+    <table class="mtable">
+      <thead>
+        <tr>
+          <th style="text-align:left">Pathway / function</th>
+          <th style="--c:var(--e-region)"><span></span><br/>Regions</th>
+          <th style="--c:var(--e-rights)"><span></span><br/>Water<br/>Rights</th>
+          <th style="--c:var(--e-dw)"><span></span><br/>Drinking<br/>Water</th>
+          <th style="--c:var(--e-wq)"><span></span><br/>Water<br/>Quality</th>
+          <th style="--c:var(--e-oima)"><span></span><br/>OIMA</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>Recreation exposure<small>swim, wade, dogs, shoreline</small></th>
+          <td><i class="mk lead" style="--c:var(--e-region)"></i></td>
+          <td></td>
+          <td></td>
+          <td><i class="mk sup" style="--c:var(--e-wq)"></i></td>
+          <td><i class="mk lead" style="--c:var(--e-oima)"></i></td>
+        </tr>
+        <tr>
+          <th>Drinking-water exposure<small>taste, odor, toxins at the tap</small></th>
+          <td><i class="mk sup" style="--c:var(--e-region)"></i></td>
+          <td><i class="mk sup" style="--c:var(--e-rights)"></i></td>
+          <td><i class="mk lead" style="--c:var(--e-dw)"></i></td>
+          <td><i class="mk sup" style="--c:var(--e-wq)"></i></td>
+          <td><i class="mk sup" style="--c:var(--e-oima)"></i></td>
+        </tr>
+        <tr>
+          <th>Cultural &amp; subsistence<small>ceremony, basketry, gathering, tribal uses</small></th>
+          <td><i class="mk sup" style="--c:var(--e-region)"></i></td>
+          <td></td>
+          <td></td>
+          <td><i class="mk sup" style="--c:var(--e-wq)"></i></td>
+          <td><i class="mk lead" style="--c:var(--e-oima)"></i></td>
+        </tr>
+        <tr>
+          <th>Food &amp; seafood toxins<small>bioaccumulation in tissue — mostly marine *</small></th>
+          <td><i class="mk sup" style="--c:var(--e-region)"></i></td>
+          <td></td>
+          <td></td>
+          <td><i class="mk sup" style="--c:var(--e-wq)"></i></td>
+          <td><i class="mk sup" style="--c:var(--e-oima)"></i></td>
+        </tr>
+        <tr>
+          <th>Driver control<small>flow, nutrients, temperature</small></th>
+          <td><i class="mk lead" style="--c:var(--e-region)"></i></td>
+          <td><i class="mk lead" style="--c:var(--e-rights)"></i></td>
+          <td><i class="mk sup" style="--c:var(--e-dw)"></i></td>
+          <td><i class="mk lead" style="--c:var(--e-wq)"></i></td>
+          <td><i class="mk sup" style="--c:var(--e-oima)"></i></td>
+        </tr>
+        <tr>
+          <th>Monitor, confirm &amp; notify<small>the public-health early warning</small></th>
+          <td><i class="mk sup" style="--c:var(--e-region)"></i></td>
+          <td><i class="mk sup" style="--c:var(--e-rights)"></i></td>
+          <td><i class="mk sup" style="--c:var(--e-dw)"></i></td>
+          <td><i class="mk sup" style="--c:var(--e-wq)"></i></td>
+          <td><i class="mk lead" style="--c:var(--e-oima)"></i></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="mkey">
+      <span><i class="mk lead"></i>Lead</span>
+      <span><i class="mk sup"></i>Supporting / partner</span>
+      <span style="color:var(--ink-3)">* Seafood toxin management sits largely with <b>CDPH, OEHHA &amp; CDFW</b> — the Water Boards contribute monitoring &amp; water-quality context.</span>
+    </div>
+  </div>
+</section>
+
+<hr class="rule"/>
+
+<!-- 4 · RESERVOIR CONVERGENCE -->
+<section class="wrap">
+  <p class="eyebrow">Panel 4 · The convergence</p>
+  <h2><span class="num">04</span>At a reservoir, everyone has a job at once</h2>
+  <p>Reservoirs and State Water Project nodes are where the whole system collides. Water is stored, moved for supply, drawn for drinking, used for recreation — so a single bloom activates all five players simultaneously. This is the picture that a pollutant-by-pollutant model can never show.</p>
+  <div class="figwrap panel" style="padding:22px 18px">
+  <figure>
+    <svg viewBox="0 0 760 560" role="img" aria-label="A reservoir with an active HAB at the center, with five players converging on it: Regional Boards convene and respond, OIMA confirms and notifies, Division of Water Quality defines the standard, Division of Drinking Water protects the intake, and Division of Water Rights manages flow and storage.">
+      <defs>
+        <marker id="rv" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+        </marker>
+      </defs>
+
+      <!-- arrows first, under pills -->
+      <g fill="none" stroke-width="2.4">
+        <path d="M380,90 L380,244" stroke="var(--e-region)" color="var(--e-region)" marker-end="url(#rv)"/>
+        <path d="M235,196 L296,264" stroke="var(--e-oima)" color="var(--e-oima)" marker-end="url(#rv)"/>
+        <path d="M525,196 L464,264" stroke="var(--e-wq)" color="var(--e-wq)" marker-end="url(#rv)"/>
+        <path d="M240,466 L300,352" stroke="var(--e-dw)" color="var(--e-dw)" marker-end="url(#rv)"/>
+        <path d="M520,466 L460,352" stroke="var(--e-rights)" color="var(--e-rights)" marker-end="url(#rv)"/>
+      </g>
+
+      <!-- arrow verbs -->
+      <text x="392" y="176" fill="var(--e-region)" font-size="12" font-style="italic">convene &amp; respond</text>
+      <text x="238" y="238" text-anchor="end" fill="var(--e-oima)" font-size="12" font-style="italic">confirm &amp; notify</text>
+      <text x="522" y="238" fill="var(--e-wq)" font-size="12" font-style="italic">define the standard</text>
+      <text x="238" y="430" text-anchor="end" fill="var(--e-dw)" font-size="12" font-style="italic">protect the intake</text>
+      <text x="522" y="430" fill="var(--e-rights)" font-size="12" font-style="italic">manage flow</text>
+
+      <!-- center reservoir -->
+      <rect x="288" y="244" width="184" height="112" rx="18" fill="color-mix(in srgb, var(--e-oima) 14%, var(--surface))" stroke="var(--e-oima)" stroke-width="2.5"/>
+      <text x="380" y="284" text-anchor="middle" fill="var(--ink)" font-size="17" font-weight="800">Reservoir</text>
+      <text x="380" y="305" text-anchor="middle" fill="var(--ink-2)" font-size="12.5">State Water Project node</text>
+      <rect x="330" y="320" width="100" height="24" rx="12" fill="var(--e-oima)"/>
+      <text x="380" y="336" text-anchor="middle" fill="var(--on)" font-size="11.5" font-weight="700" font-family="var(--font-mono)">ACTIVE HAB</text>
+
+      <!-- pills -->
+      <!-- Region top -->
+      <g>
+        <rect x="270" y="26" width="220" height="64" rx="12" fill="var(--surface)" stroke="var(--e-region)" stroke-width="2"/>
+        <text x="380" y="52" text-anchor="middle" fill="var(--ink)" font-size="14.5" font-weight="700">Regional Water Board</text>
+        <text x="380" y="72" text-anchor="middle" fill="var(--ink-2)" font-size="12">Basin Plan · beneficial uses</text>
+      </g>
+      <!-- OIMA upper-left -->
+      <g>
+        <rect x="26" y="132" width="220" height="64" rx="12" fill="var(--surface)" stroke="var(--e-oima)" stroke-width="2"/>
+        <text x="136" y="158" text-anchor="middle" fill="var(--ink)" font-size="14.5" font-weight="700">OIMA</text>
+        <text x="136" y="178" text-anchor="middle" fill="var(--ink-2)" font-size="12">monitoring network · alerts</text>
+      </g>
+      <!-- Water Quality upper-right -->
+      <g>
+        <rect x="514" y="132" width="220" height="64" rx="12" fill="var(--surface)" stroke="var(--e-wq)" stroke-width="2"/>
+        <text x="624" y="158" text-anchor="middle" fill="var(--ink)" font-size="14.5" font-weight="700">Division of Water Quality</text>
+        <text x="624" y="178" text-anchor="middle" fill="var(--ink-2)" font-size="12">objectives · prohibitions</text>
+      </g>
+      <!-- Drinking Water lower-left -->
+      <g>
+        <rect x="26" y="466" width="220" height="64" rx="12" fill="var(--surface)" stroke="var(--e-dw)" stroke-width="2"/>
+        <text x="136" y="492" text-anchor="middle" fill="var(--ink)" font-size="14.5" font-weight="700">Division of Drinking Water</text>
+        <text x="136" y="512" text-anchor="middle" fill="var(--ink-2)" font-size="12">source &amp; tap protection</text>
+      </g>
+      <!-- Water Rights lower-right -->
+      <g>
+        <rect x="514" y="466" width="220" height="64" rx="12" fill="var(--surface)" stroke="var(--e-rights)" stroke-width="2"/>
+        <text x="624" y="492" text-anchor="middle" fill="var(--ink)" font-size="14.5" font-weight="700">Division of Water Rights</text>
+        <text x="624" y="512" text-anchor="middle" fill="var(--ink-2)" font-size="12">flow · storage · diversions</text>
+      </g>
+    </svg>
+    <figcaption><b>The reservoir is the stress test.</b> Every arrow is a live obligation triggered by the same bloom: Water Rights is moving the water, Drinking Water is guarding the intake, Water Quality's objectives set the bar, the Region convenes the response in its basin, and OIMA confirms the toxin and warns the public. Swap the center node and the arrows rearrange — that's the next panel.</figcaption>
+  </figure>
+  </div>
+
+  <div class="places">
+    <div class="place">
+      <h3>River beach</h3>
+      <p class="sub">e.g. a swimming reach — the CyanoSafe world</p>
+      <div class="who">
+        <span class="tag" style="--c:var(--e-oima)">OIMA</span>
+        <span class="tag" style="--c:var(--e-region)">Regions</span>
+        <span class="tag" style="--c:var(--e-wq)">Water Quality</span>
+      </div>
+      <p class="note">Recreation-first. Monitoring &amp; public notice lead; flow matters upstream but drinking-water rarely at the node itself.</p>
+    </div>
+    <div class="place">
+      <h3>Sacramento–San Joaquin Delta</h3>
+      <p class="sub">flow-managed hub for supply &amp; ecosystem</p>
+      <div class="who">
+        <span class="tag" style="--c:var(--e-rights)">Water Rights</span>
+        <span class="tag" style="--c:var(--e-wq)">Water Quality</span>
+        <span class="tag" style="--c:var(--e-region)">Regions</span>
+        <span class="tag" style="--c:var(--e-dw)">Drinking Water</span>
+        <span class="tag" style="--c:var(--e-oima)">OIMA</span>
+      </div>
+      <p class="note">Water Quality's objectives are implemented <b>through Water Rights</b> here — the clearest example of the rulebook and the flow lever coupled.</p>
+    </div>
+    <div class="place">
+      <h3>Coast / marine</h3>
+      <p class="sub">shellfish &amp; fisheries waters</p>
+      <div class="who">
+        <span class="tag" style="--c:var(--e-oima)">OIMA</span>
+        <span class="tag" style="--c:var(--e-region)">Regions</span>
+        <span class="tag" style="--c:var(--ink-3);--on:var(--surface)">CDPH / OEHHA / CDFW</span>
+      </div>
+      <p class="note">Food pathway dominates and different organisms drive it — lead shifts toward sister agencies. See Panel 5.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="rule"/>
+
+<!-- 5 · FRESH VS MARINE -->
+<section class="wrap">
+  <p class="eyebrow">Panel 5 · The fork</p>
+  <h2><span class="num">05</span>Freshwater and marine are different problems</h2>
+  <p>The fourth pathway — contaminated food — behaves unlike the other three. It's concentrated in the marine environment, driven by different organisms and toxins, and the lead role shifts to sister agencies. Drawing the two side by side keeps the freshwater model from over-claiming the ocean.</p>
+  <div class="split">
+    <div class="env fresh">
+      <div class="cap">Freshwater &amp; estuarine</div>
+      <dl>
+        <dt>Culprits</dt>
+        <dd><b>Cyanobacteria</b> — <i>Microcystis, Dolichospermum/Anabaena, Aphanizomenon</i></dd>
+        <dt>Toxins</dt>
+        <dd>Microcystins, anatoxin-a, cylindrospermopsin, saxitoxins</dd>
+        <dt>Dominant pathways</dt>
+        <dd>Recreation · drinking water · cultural &amp; subsistence</dd>
+        <dt>Who leads</dt>
+        <dd>Water Boards <b>Regions + three Divisions</b>, monitored &amp; noticed by OIMA</dd>
+      </dl>
+    </div>
+    <div class="env marine">
+      <div class="cap">Marine &amp; coastal</div>
+      <dl>
+        <dt>Culprits</dt>
+        <dd><b>Diatoms &amp; dinoflagellates</b> — <i>Pseudo-nitzschia, Alexandrium</i></dd>
+        <dt>Toxins</dt>
+        <dd>Domoic acid (amnesic), saxitoxin (paralytic shellfish poisoning)</dd>
+        <dt>Dominant pathway</dt>
+        <dd><b>Food &amp; seafood</b> — toxins bioaccumulate in shellfish &amp; fish tissue</dd>
+        <dt>Who leads</dt>
+        <dd><b>CDPH, OEHHA, CDFW</b> (+ Cal OES); Water Boards add nearshore water-quality &amp; monitoring context</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p><b>How to use this.</b> This is a v1 conceptual model — a scaffold to argue with, not a finished graphic. The five colors are consistent across every panel so a reader can carry them from one view to the next. Likely edits: refine the lead/support calls in Panel 3, add or rename place archetypes in Panel 4, and confirm the marine agency roles in Panel 5.</p>
+    <p style="margin-top:.6em">Role assignments are the author's working characterization of typical responsibilities, not a legal delineation of authority. Marine seafood-toxin management in California is led primarily by CDPH, OEHHA and CDFW. For the places where freshwater HABs actually occur, see the CyanoSafe monitoring work.</p>
+  </div>
+</footer>
+</body>
+</html>
