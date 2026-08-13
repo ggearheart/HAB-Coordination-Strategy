@@ -24,6 +24,7 @@
     --e-dw:#2c6db0;       /* Drinking Water — blue */
     --e-wq:#7350b8;       /* Water Quality — violet */
     --e-oima:#c13a76;     /* OIMA — rose */
+    --e-opeeta:#bf4a2e;   /* OPEETA — terracotta */
 
     --warn:#c2410c;
     --on:#ffffff;   /* text on a solid entity color */
@@ -49,6 +50,7 @@
       --e-dw:#6ba8e6;
       --e-wq:#b29ae8;
       --e-oima:#ec7bac;
+      --e-opeeta:#f0906e;
       --warn:#f08a4b;
       --on:#0c1413;
       --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 32px rgba(0,0,0,.35);
@@ -69,6 +71,7 @@
     --e-dw:#6ba8e6;
     --e-wq:#b29ae8;
     --e-oima:#ec7bac;
+    --e-opeeta:#f0906e;
     --warn:#f08a4b;
     --on:#0c1413;
     --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 32px rgba(0,0,0,.35);
@@ -135,7 +138,7 @@
   .howto .t b{color:var(--ink);font-weight:650}
 
   /* five players */
-  .players{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+  .players{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
   @media(max-width:900px){.players{grid-template-columns:repeat(2,1fr)}}
   @media(max-width:520px){.players{grid-template-columns:1fr}}
   .pc{
@@ -156,7 +159,7 @@
 
   /* matrix */
   .matrix{overflow-x:auto}
-  .mtable{min-width:640px;width:100%;border-collapse:separate;border-spacing:0}
+  .mtable{min-width:740px;width:100%;border-collapse:separate;border-spacing:0}
   .mtable th,.mtable td{padding:11px 10px;text-align:center;border-bottom:1px solid var(--line)}
   .mtable thead th{
     font-family:var(--font-mono);font-size:11px;text-transform:uppercase;letter-spacing:.05em;
@@ -220,8 +223,9 @@
       <div class="step"><span class="k">01</span><span class="t"><b>Institutional actors and their authorities</b> — the five entities, color-coded and held constant across every panel.</span></div>
       <div class="step"><span class="k">02</span><span class="t"><b>Causal pathway</b> — the controllable drivers, bloom formation, and the four routes of human exposure.</span></div>
       <div class="step"><span class="k">03</span><span class="t"><b>Allocation of lead and supporting roles</b> — organized by exposure pathway and function.</span></div>
-      <div class="step"><span class="k">04</span><span class="t"><b>Reservoir case</b> — a single waterbody that engages all five entities concurrently.</span></div>
-      <div class="step"><span class="k">05</span><span class="t"><b>Freshwater and marine systems</b> — differing causative taxa, toxins, and lead agencies.</span></div>
+      <div class="step"><span class="k">04</span><span class="t"><b>Reservoir case</b> — a single waterbody that engages all six entities concurrently.</span></div>
+      <div class="step"><span class="k">05</span><span class="t"><b>Tribal Beneficial Uses</b> — how OPEETA and the Regional Boards protect the cultural (CUL) use.</span></div>
+      <div class="step"><span class="k">06</span><span class="t"><b>Freshwater and marine systems</b> — differing causative taxa, toxins, and lead agencies.</span></div>
     </div>
   </div>
 </header>
@@ -229,7 +233,7 @@
 <!-- 1 · FIVE PLAYERS -->
 <section class="wrap">
   <p class="eyebrow">Panel 1 · Institutional actors</p>
-  <h2><span class="num">01</span>Five entities and their distinct authorities</h2>
+  <h2><span class="num">01</span>Six entities and their distinct authorities</h2>
   <p>Each entity contributes one distinct regulatory or scientific authority to HAB response. No single entity constitutes a HAB program in isolation; the functional program emerges from the coordinated application of these authorities to a common waterbody.</p>
   <div class="players">
     <div class="pc" style="--c:var(--e-region)">
@@ -256,6 +260,11 @@
       <span class="nm"><span class="dot"></span>OIMA</span>
       <span class="lever">Monitoring &amp; notification</span>
       <span class="role">Coordinate statewide HAB monitoring, directing a partner network to <b>sample, confirm blooms, and issue public notification</b> regarding the hazards of recreational contact with affected waters.</span>
+    </div>
+    <div class="pc" style="--c:var(--e-opeeta)">
+      <span class="nm"><span class="dot"></span>OPEETA</span>
+      <span class="lever">Tribal affairs &amp; TBUs</span>
+      <span class="role">The Office of Public Engagement, Equity &amp; Tribal Affairs — the Boards' formal tribal liaison, leading <b>government-to-government engagement</b> with sovereign, federally recognized tribes and coordinating the <b>Tribal Beneficial Use (TBU)</b> process, including the cultural (CUL) use adopted by the Regional Boards into Basin Plans.</span>
     </div>
   </div>
 </section>
@@ -353,13 +362,13 @@
         <rect x="828" y="302" width="262" height="108" rx="11" fill="var(--surface-2)" stroke="var(--line-2)"/>
         <text x="848" y="334" fill="var(--ink)" font-size="16.5" font-weight="700">Cultural &amp; subsistence</text>
         <text x="848" y="355" fill="var(--ink-2)" font-size="12.5">ceremony · basketry · subsistence</text>
-        <circle cx="852" cy="382" r="6" fill="var(--e-oima)"/><circle cx="872" cy="382" r="6" fill="var(--e-region)"/><circle cx="892" cy="382" r="6" fill="var(--e-wq)"/>
+        <circle cx="852" cy="382" r="6" fill="var(--e-oima)"/><circle cx="872" cy="382" r="6" fill="var(--e-opeeta)"/><circle cx="892" cy="382" r="6" fill="var(--e-region)"/><circle cx="912" cy="382" r="6" fill="var(--e-wq)"/>
       </g>
       <g>
         <rect x="828" y="432" width="262" height="108" rx="11" fill="var(--surface-2)" stroke="var(--line-2)"/>
         <text x="848" y="464" fill="var(--ink)" font-size="16.5" font-weight="700">Food &amp; seafood</text>
         <text x="848" y="485" fill="var(--ink-2)" font-size="12.5">toxin bioaccumulation in tissue</text>
-        <text x="848" y="505" fill="var(--ink-3)" font-size="12" font-style="italic">predominantly marine — see Panel 5</text>
+        <text x="848" y="505" fill="var(--ink-3)" font-size="12" font-style="italic">predominantly marine — see Panel 6</text>
       </g>
     </svg>
     <figcaption>The three factors at left are the principal variables under the Boards' regulatory influence; the colored tags identify the entity holding each authority. They <b>promote proliferation</b> of the bloom, which in turn opens four <b>routes of human exposure</b>. The dashed rose arrow denotes the monitoring function: absent OIMA's sampling and confirmation, the linkage between a driver and a bloom cannot be established. Colored markers indicate the responding entities for each pathway; Panel 3 specifies these roles.</figcaption>
@@ -384,40 +393,54 @@
           <th style="--c:var(--e-dw)"><span></span><br/>Drinking<br/>Water</th>
           <th style="--c:var(--e-wq)"><span></span><br/>Water<br/>Quality</th>
           <th style="--c:var(--e-oima)"><span></span><br/>OIMA</th>
+          <th style="--c:var(--e-opeeta)"><span></span><br/>OPEETA</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <th>Recreation exposure<small>swim, wade, dogs, shoreline</small></th>
+          <th>Recreation exposure<small>swimming, wading, canine, shoreline</small></th>
           <td><i class="mk lead" style="--c:var(--e-region)"></i></td>
           <td></td>
           <td></td>
           <td><i class="mk sup" style="--c:var(--e-wq)"></i></td>
           <td><i class="mk lead" style="--c:var(--e-oima)"></i></td>
+          <td></td>
         </tr>
         <tr>
-          <th>Drinking-water exposure<small>taste, odor, toxins at the tap</small></th>
+          <th>Drinking-water exposure<small>taste, odor, cyanotoxins at the tap</small></th>
           <td><i class="mk sup" style="--c:var(--e-region)"></i></td>
           <td><i class="mk sup" style="--c:var(--e-rights)"></i></td>
           <td><i class="mk lead" style="--c:var(--e-dw)"></i></td>
           <td><i class="mk sup" style="--c:var(--e-wq)"></i></td>
           <td><i class="mk sup" style="--c:var(--e-oima)"></i></td>
+          <td></td>
         </tr>
         <tr>
-          <th>Cultural &amp; subsistence<small>ceremony, basketry, gathering, tribal uses</small></th>
+          <th>Cultural &amp; subsistence<small>ceremony, basketry, subsistence gathering</small></th>
           <td><i class="mk sup" style="--c:var(--e-region)"></i></td>
           <td></td>
           <td></td>
           <td><i class="mk sup" style="--c:var(--e-wq)"></i></td>
           <td><i class="mk lead" style="--c:var(--e-oima)"></i></td>
+          <td><i class="mk sup" style="--c:var(--e-opeeta)"></i></td>
         </tr>
         <tr>
-          <th>Food &amp; seafood toxins<small>bioaccumulation in tissue — mostly marine *</small></th>
+          <th>Tribal Beneficial Uses<small>CUL and related uses adopted into Basin Plans; government-to-government</small></th>
+          <td><i class="mk lead" style="--c:var(--e-region)"></i></td>
+          <td></td>
+          <td></td>
+          <td><i class="mk sup" style="--c:var(--e-wq)"></i></td>
+          <td></td>
+          <td><i class="mk lead" style="--c:var(--e-opeeta)"></i></td>
+        </tr>
+        <tr>
+          <th>Food &amp; seafood toxins<small>bioaccumulation in tissue — predominantly marine *</small></th>
           <td><i class="mk sup" style="--c:var(--e-region)"></i></td>
           <td></td>
           <td></td>
           <td><i class="mk sup" style="--c:var(--e-wq)"></i></td>
           <td><i class="mk sup" style="--c:var(--e-oima)"></i></td>
+          <td></td>
         </tr>
         <tr>
           <th>Driver control<small>flow, nutrients, temperature</small></th>
@@ -426,6 +449,7 @@
           <td><i class="mk sup" style="--c:var(--e-dw)"></i></td>
           <td><i class="mk lead" style="--c:var(--e-wq)"></i></td>
           <td><i class="mk sup" style="--c:var(--e-oima)"></i></td>
+          <td></td>
         </tr>
         <tr>
           <th>Monitor, confirm &amp; notify<small>the public-health early warning</small></th>
@@ -434,6 +458,7 @@
           <td><i class="mk sup" style="--c:var(--e-dw)"></i></td>
           <td><i class="mk sup" style="--c:var(--e-wq)"></i></td>
           <td><i class="mk lead" style="--c:var(--e-oima)"></i></td>
+          <td><i class="mk sup" style="--c:var(--e-opeeta)"></i></td>
         </tr>
       </tbody>
     </table>
@@ -451,10 +476,10 @@
 <section class="wrap">
   <p class="eyebrow">Panel 4 · Concurrent activation</p>
   <h2><span class="num">04</span>A recurrent reservoir HAB engages every part of our organization</h2>
-  <p>Reservoirs and State Water Project facilities are nodes at which multiple functions coincide: water is stored, conveyed for supply, withdrawn for potable use, and used for recreation. A single bloom therefore engages all five entities concurrently — an interdependency that a pollutant-by-pollutant framework cannot represent.</p>
+  <p>Reservoirs and State Water Project facilities are nodes at which multiple functions coincide: water is stored, conveyed for supply, withdrawn for potable use, and used for recreation. A single bloom therefore engages all six entities concurrently — an interdependency that a pollutant-by-pollutant framework cannot represent.</p>
   <div class="figwrap panel" style="padding:22px 18px">
   <figure>
-    <svg viewBox="0 0 880 560" role="img" aria-label="A reservoir with an active HAB at the center, with five players converging on it: Regional Boards convene and respond, OIMA confirms and notifies, Division of Water Quality defines the standard, Division of Drinking Water protects the intake, and Division of Water Rights manages flow and storage. A thin link shows the autonomous Regional Boards relying on Water Quality's products, and a pending Water Quality Criteria and Policy for HABs arcs around like a semicircle to strengthen both the Regional Boards' response and Water Rights' Delta flow objectives.">
+    <svg viewBox="0 0 880 600" role="img" aria-label="A reservoir with an active HAB at the center, with six entities converging on it: Regional Boards convene the response, OIMA confirms and notifies, Division of Water Quality establishes criteria, Division of Drinking Water protects the intake, Division of Water Rights regulates flow and storage, and OPEETA coordinates tribal liaison where cultural uses are designated. A thin link shows the autonomous Regional Boards relying on Water Quality's products, and a pending Water Quality Criteria and Policy for HABs arcs around like a semicircle to strengthen both the Regional Boards' response and Water Rights' Delta flow objectives.">
       <defs>
         <marker id="rv" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
@@ -516,6 +541,15 @@
         <text x="624" y="512" text-anchor="middle" fill="var(--ink-2)" font-size="12">flow · storage · diversions</text>
       </g>
 
+      <!-- OPEETA bottom-center: tribal liaison where CUL uses are designated -->
+      <path d="M 380 510 L 380 358" fill="none" stroke="var(--e-opeeta)" stroke-width="2.4" color="var(--e-opeeta)" marker-end="url(#rv)"/>
+      <text x="392" y="472" fill="var(--e-opeeta)" font-size="12" font-style="italic">tribal liaison</text>
+      <g>
+        <rect x="275" y="512" width="210" height="64" rx="12" fill="var(--surface)" stroke="var(--e-opeeta)" stroke-width="2"/>
+        <text x="380" y="538" text-anchor="middle" fill="var(--ink)" font-size="14.5" font-weight="700">OPEETA</text>
+        <text x="380" y="558" text-anchor="middle" fill="var(--ink-2)" font-size="12">tribal affairs · TBU / CUL</text>
+      </g>
+
       <!-- SUBTLE: autonomous Regions rely on Water Quality's products -->
       <path d="M 548 132 Q 500 104 480 90" fill="none" stroke="var(--ink-3)" stroke-width="1.4" stroke-dasharray="3 3" opacity="0.7" color="var(--ink-3)" marker-end="url(#rv)"/>
       <text x="527" y="103" text-anchor="middle" fill="var(--ink-3)" font-size="10" font-style="italic">relies on WQ products</text>
@@ -534,7 +568,7 @@
       <text x="770" y="150" text-anchor="middle" fill="var(--e-wq)" font-size="11" font-style="italic">criteria applied by Regions</text>
       <text x="806" y="374" text-anchor="middle" fill="var(--e-wq)" font-size="11" font-style="italic">supports Delta flow objectives</text>
     </svg>
-    <figcaption>A recurrent HAB problem in a reservoir represents an obvious example of how all parts of our organization react. Each solid arrow denotes a concurrent obligation triggered by the same bloom: the Division of Water Rights governs storage and release, the Division of Drinking Water protects the intake, the Division of Water Quality's objectives establish the applicable criteria, the Regional Board convenes the basin-scale response, and OIMA confirms the cyanotoxin and issues public notification. The Regional Boards act under their own delegated authority yet depend on the products of the Division of Water Quality (thin grey link). The dashed violet arc denotes the pending <b>Water Quality Criteria and Policy for HABs</b> — a Division of Water Quality product that extends laterally to reinforce both the Regional response and the Division of Water Rights' Delta flow objectives.</figcaption>
+    <figcaption>A recurrent HAB problem in a reservoir represents an obvious example of how all parts of our organization react. Each solid arrow denotes a concurrent obligation triggered by the same bloom: the Division of Water Rights governs storage and release, the Division of Drinking Water protects the intake, the Division of Water Quality's objectives establish the applicable criteria, the Regional Board convenes the basin-scale response, and OIMA confirms the cyanotoxin and issues public notification. Where cultural (CUL) uses are designated, OPEETA coordinates government-to-government engagement with the affected tribes (Panel 5). The Regional Boards act under their own delegated authority yet depend on the products of the Division of Water Quality (thin grey link). The dashed violet arc denotes the pending <b>Water Quality Criteria and Policy for HABs</b> — a Division of Water Quality product that extends laterally to reinforce both the Regional response and the Division of Water Rights' Delta flow objectives.</figcaption>
   </figure>
   </div>
 
@@ -558,6 +592,7 @@
         <span class="tag" style="--c:var(--e-region)">Regions</span>
         <span class="tag" style="--c:var(--e-dw)">Drinking Water</span>
         <span class="tag" style="--c:var(--e-oima)">OIMA</span>
+        <span class="tag" style="--c:var(--e-opeeta)">OPEETA</span>
       </div>
       <p class="note">Here the Division of Water Quality's objectives are implemented <b>through the Division of Water Rights</b> — the clearest instance of regulatory criteria coupled to flow administration.</p>
     </div>
@@ -569,17 +604,77 @@
         <span class="tag" style="--c:var(--e-region)">Regions</span>
         <span class="tag" style="--c:var(--ink-3);--on:var(--surface)">CDPH / OEHHA / CDFW</span>
       </div>
-      <p class="note">The dietary exposure pathway predominates and is driven by different causative organisms; lead responsibility shifts toward partner agencies. See Panel 5.</p>
+      <p class="note">The dietary exposure pathway predominates and is driven by different causative organisms; lead responsibility shifts toward partner agencies. See Panel 6.</p>
     </div>
   </div>
 </section>
 
 <hr class="rule"/>
 
-<!-- 5 · FRESH VS MARINE -->
+<!-- 5 · TRIBAL BENEFICIAL USES -->
 <section class="wrap">
-  <p class="eyebrow">Panel 5 · System differentiation</p>
-  <h2><span class="num">05</span>Freshwater and marine systems are distinct problems</h2>
+  <p class="eyebrow">Panel 5 · Tribal beneficial uses</p>
+  <h2><span class="num">05</span>Tribal Beneficial Uses and the cultural (CUL) designation</h2>
+  <p>Federally recognized tribes are sovereign governments. The Office of Public Engagement, Equity &amp; Tribal Affairs (OPEETA) serves as the Boards' formal tribal liaison and leads government-to-government engagement. In that capacity OPEETA coordinates and supports the <b>Tribal Beneficial Use (TBU)</b> process, through which uses such as the cultural (<b>CUL</b>) use — collecting material for ceremonies and conducting ceremonies in and near water — are developed and, by the nine Regional Boards, adopted into Basin Plans. The specific uses vary by tribe, community, and place. Once adopted, a designated use is a protected beneficial use, which is why HAB monitoring and notification at these waters is consequential.</p>
+  <div class="figwrap panel" style="padding:22px 18px">
+  <figure>
+    <svg viewBox="0 0 1180 210" role="img" aria-label="Process for Tribal Beneficial Uses: sovereign tribal governments engage OPEETA in government-to-government diplomacy; OPEETA coordinates and supports the Tribal Beneficial Use process; Tribal Beneficial Uses such as the cultural (CUL) use are developed and adopted by the nine Regional Boards into Basin Plans; the result is a protected cultural use recognized where HABs occur.">
+      <defs>
+        <marker id="tb" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/>
+        </marker>
+      </defs>
+
+      <!-- arrows -->
+      <g stroke="var(--ink-3)" stroke-width="2" fill="none">
+        <line x1="222" y1="110" x2="253" y2="110" marker-start="url(#tb)" marker-end="url(#tb)"/>
+        <line x1="457" y1="110" x2="488" y2="110" marker-end="url(#tb)"/>
+        <line x1="692" y1="110" x2="723" y2="110" marker-end="url(#tb)"/>
+        <line x1="927" y1="110" x2="958" y2="110" marker-end="url(#tb)"/>
+      </g>
+      <text x="237" y="46" text-anchor="middle" fill="var(--e-opeeta)" font-size="11.5" font-style="italic">government-to-government</text>
+      <text x="472" y="46" text-anchor="middle" fill="var(--ink-3)" font-size="11.5" font-style="italic">coordinate &amp; support</text>
+      <text x="707" y="46" text-anchor="middle" fill="var(--ink-3)" font-size="11.5" font-style="italic">developed &amp; adopted</text>
+      <text x="942" y="46" text-anchor="middle" fill="var(--ink-3)" font-size="11.5" font-style="italic">protected as a use</text>
+
+      <!-- B1 sovereign tribes -->
+      <rect x="22" y="62" width="200" height="96" rx="12" fill="var(--surface-2)" stroke="var(--ink-2)" stroke-width="2"/>
+      <text x="122" y="100" text-anchor="middle" fill="var(--ink)" font-size="15" font-weight="700">Sovereign tribes</text>
+      <text x="122" y="121" text-anchor="middle" fill="var(--ink-2)" font-size="12">federally recognized</text>
+      <text x="122" y="138" text-anchor="middle" fill="var(--ink-2)" font-size="12">governments</text>
+
+      <!-- B2 OPEETA -->
+      <rect x="257" y="62" width="200" height="96" rx="12" fill="color-mix(in srgb, var(--e-opeeta) 12%, var(--surface))" stroke="var(--e-opeeta)" stroke-width="2"/>
+      <text x="357" y="104" text-anchor="middle" fill="var(--ink)" font-size="15" font-weight="700">OPEETA</text>
+      <text x="357" y="125" text-anchor="middle" fill="var(--ink-2)" font-size="12">formal tribal liaison</text>
+
+      <!-- B3 TBU -->
+      <rect x="492" y="62" width="200" height="96" rx="12" fill="var(--surface)" stroke="var(--e-opeeta)" stroke-width="2"/>
+      <text x="592" y="97" text-anchor="middle" fill="var(--ink)" font-size="14.5" font-weight="700">Tribal Beneficial Uses</text>
+      <text x="592" y="117" text-anchor="middle" fill="var(--e-opeeta)" font-size="12" font-weight="600">cultural (CUL) use</text>
+      <text x="592" y="135" text-anchor="middle" fill="var(--ink-2)" font-size="11">ceremony &amp; gathering near water</text>
+
+      <!-- B4 Regional Boards -->
+      <rect x="727" y="62" width="200" height="96" rx="12" fill="color-mix(in srgb, var(--e-region) 12%, var(--surface))" stroke="var(--e-region)" stroke-width="2"/>
+      <text x="827" y="104" text-anchor="middle" fill="var(--ink)" font-size="15" font-weight="700">Regional Boards (×9)</text>
+      <text x="827" y="125" text-anchor="middle" fill="var(--ink-2)" font-size="12">adopt into Basin Plans</text>
+
+      <!-- B5 outcome -->
+      <rect x="962" y="62" width="200" height="96" rx="12" fill="var(--surface-2)" stroke="var(--e-region)" stroke-width="2"/>
+      <text x="1062" y="104" text-anchor="middle" fill="var(--ink)" font-size="15" font-weight="700">CUL use protected</text>
+      <text x="1062" y="125" text-anchor="middle" fill="var(--ink-2)" font-size="12">safeguarded where HABs occur</text>
+    </svg>
+    <figcaption>OPEETA does not exercise regulatory authority over water quality; its function is diplomatic and coordinative. It maintains the government-to-government relationship with sovereign tribes and shepherds the Tribal Beneficial Use process, while the <b>Regional Boards</b> hold the authority to adopt the resulting uses into Basin Plans. A designated CUL use makes the cultural and subsistence exposure pathway of Panel 2 an explicit, protected beneficial use — the basis on which HAB monitoring and public notification at these waters is justified.</figcaption>
+  </figure>
+  </div>
+</section>
+
+<hr class="rule"/>
+
+<!-- 6 · FRESH VS MARINE -->
+<section class="wrap">
+  <p class="eyebrow">Panel 6 · System differentiation</p>
+  <h2><span class="num">06</span>Freshwater and marine systems are distinct problems</h2>
   <p>The fourth pathway — dietary exposure through contaminated food — differs materially from the other three. It is concentrated in the marine environment, driven by different causative taxa and toxins, and led primarily by partner agencies. Presenting the two systems together prevents the freshwater model from being over-extended to marine waters.</p>
   <div class="split">
     <div class="env fresh">
@@ -613,7 +708,7 @@
 
 <footer>
   <div class="wrap">
-    <p><b>Status.</b> This is a preliminary (v1) conceptual model intended as a basis for review and revision, not a finished graphic. The five-color assignment is held constant across panels so that entities can be tracked between views. Anticipated revisions: refinement of the lead and supporting designations in Panel 3, addition or renaming of waterbody archetypes in Panel 4, and confirmation of marine agency roles in Panel 5.</p>
+    <p><b>Status.</b> This is a preliminary (v1) conceptual model intended as a basis for review and revision, not a finished graphic. The six-color assignment is held constant across panels so that entities can be tracked between views. Anticipated revisions: refinement of the lead and supporting designations in Panel 3, addition or renaming of waterbody archetypes in Panel 4, confirmation of the Tribal Beneficial Use roles in Panel 5, and confirmation of marine agency roles in Panel 6.</p>
     <p style="margin-top:.6em">Role assignments represent a working characterization of typical responsibilities, not a legal delineation of authority. Management of marine seafood toxins in California is led primarily by CDPH, OEHHA, and CDFW. For the waters in which freshwater HABs occur, see the CyanoSafe monitoring effort.</p>
   </div>
 </footer>
