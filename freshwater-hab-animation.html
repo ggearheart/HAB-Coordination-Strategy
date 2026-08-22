@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A simplified animation of how freshwater harmful algal blooms develop in streams, rivers, and reservoirs, viewed through California Water Board programs.">
+<title>How freshwater HABs develop — a Water Board view</title>
+<style>
+  :root{
+    --bg:#f5f8f8; --surface:#ffffff; --surface-2:#eef3f3;
+    --ink:#16211f; --ink-2:#43514e; --ink-3:#6c7a76;
+    --line:#d7e0de; --line-2:#c2cecb; --accent:#0f766e;
+
+    --e-region:#1f7a6b; --e-rights:#b57a1e; --e-dw:#2c6db0;
+    --e-wq:#7350b8; --e-oima:#c13a76; --e-opeeta:#bf4a2e;
+
+    /* canvas scene colors */
+    --c-sky1:#e4f1f5; --c-sky2:#cbe6ee;
+    --c-water1:#cfeaf2; --c-water2:#7fb6cc;
+    --c-earth:#b79b78; --c-earth2:#8a7255;
+    --c-algae:#4f9e3a; --c-scum:#7cbf3a;
+    --c-nutrient:#b5892a; --c-toxin:#c0392b;
+    --c-arrow:#2c6db0;
+
+    --on:#ffffff;
+    --radius:14px;
+    --font-sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --font-mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --shadow:0 1px 2px rgba(20,40,38,.06),0 8px 28px rgba(20,40,38,.06);
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --bg:#0c1413; --surface:#121e1c; --surface-2:#182726;
+      --ink:#e7eeec; --ink-2:#aebbb8; --ink-3:#7f8f8b;
+      --line:#25332f; --line-2:#324540; --accent:#5ec6b3;
+      --e-region:#4fc2ac; --e-rights:#e0a94a; --e-dw:#6ba8e6;
+      --e-wq:#b29ae8; --e-oima:#ec7bac; --e-opeeta:#f0906e;
+      --c-sky1:#0f2a33; --c-sky2:#0a1f27;
+      --c-water1:#123c4a; --c-water2:#0a2531;
+      --c-earth:#4a3d2c; --c-earth2:#362c20;
+      --c-algae:#57c145; --c-scum:#8fd94f;
+      --c-nutrient:#d8a63e; --c-toxin:#e5533f;
+      --c-arrow:#6ba8e6;
+      --on:#0c1413;
+      --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 32px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0c1413; --surface:#121e1c; --surface-2:#182726;
+    --ink:#e7eeec; --ink-2:#aebbb8; --ink-3:#7f8f8b;
+    --line:#25332f; --line-2:#324540; --accent:#5ec6b3;
+    --e-region:#4fc2ac; --e-rights:#e0a94a; --e-dw:#6ba8e6;
+    --e-wq:#b29ae8; --e-oima:#ec7bac; --e-opeeta:#f0906e;
+    --c-sky1:#0f2a33; --c-sky2:#0a1f27;
+    --c-water1:#123c4a; --c-water2:#0a2531;
+    --c-earth:#4a3d2c; --c-earth2:#362c20;
+    --c-algae:#57c145; --c-scum:#8fd94f;
+    --c-nutrient:#d8a63e; --c-toxin:#e5533f;
+    --c-arrow:#6ba8e6;
+    --on:#0c1413;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 32px rgba(0,0,0,.35);
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-sans);line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1000px;margin:0 auto;padding:26px 20px 60px}
+  .eyebrow{font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.16em;font-size:11px;color:var(--ink-3);margin:0 0 8px}
+  h1{font-size:clamp(24px,4vw,34px);line-height:1.08;letter-spacing:-.02em;font-weight:800;margin:.1em 0 .3em;text-wrap:balance}
+  .sub{color:var(--ink-2);max-width:70ch;margin:0 0 20px;font-size:16px}
+  .sub b{color:var(--ink)}
+
+  /* waterbody toggle */
+  .types{display:inline-flex;gap:4px;background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:4px;margin-bottom:16px;flex-wrap:wrap}
+  .types button{
+    font-family:var(--font-sans);font-size:14px;font-weight:600;color:var(--ink-2);
+    background:transparent;border:0;border-radius:9px;padding:8px 15px;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:1px;line-height:1.1
+  }
+  .types button .rt{font-family:var(--font-mono);font-size:10px;font-weight:600;color:var(--ink-3);text-transform:uppercase;letter-spacing:.04em}
+  .types button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+  .types button[aria-pressed="true"] .rt{color:var(--accent)}
+
+  .stage{position:relative;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);background:var(--surface)}
+  canvas{display:block;width:100%;height:auto}
+
+  .hud{position:absolute;pointer-events:none;font-family:var(--font-mono);font-size:11px;letter-spacing:.03em}
+  .hud-res{top:12px;right:14px;text-align:right;color:var(--ink-2);background:color-mix(in srgb,var(--surface) 78%,transparent);border:1px solid var(--line);border-radius:9px;padding:7px 10px;backdrop-filter:blur(3px)}
+  .hud-res .bar{width:120px;height:6px;border-radius:3px;background:var(--line-2);margin-top:5px;overflow:hidden}
+  .hud-res .fill{height:100%;background:linear-gradient(90deg,var(--e-dw),var(--e-oima));width:30%;transition:width .5s ease}
+  .hud-res .lab{text-transform:uppercase;color:var(--ink-3);font-size:9.5px}
+
+  .caption{position:absolute;left:14px;right:14px;bottom:14px;background:color-mix(in srgb,var(--surface) 84%,transparent);border:1px solid var(--line);border-radius:11px;padding:12px 14px;backdrop-filter:blur(4px)}
+  .caption .st{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+  .caption .snum{font-family:var(--font-mono);font-size:11px;color:var(--accent);font-weight:700}
+  .caption .stitle{font-weight:700;font-size:16px;letter-spacing:-.01em}
+  .caption .stext{color:var(--ink-2);font-size:13.5px;margin:0}
+  .chips{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+  .chip{font-family:var(--font-mono);font-size:10.5px;font-weight:600;padding:3px 8px;border-radius:20px;color:var(--on);background:var(--c);white-space:nowrap;letter-spacing:.02em}
+
+  /* timeline */
+  .timeline{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:14px}
+  .timeline button{position:relative;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:9px 10px;cursor:pointer;overflow:hidden}
+  .timeline button .tn{font-family:var(--font-mono);font-size:10px;color:var(--ink-3);font-weight:600}
+  .timeline button .tt{font-size:11.5px;color:var(--ink-2);font-weight:600;line-height:1.15;display:block;margin-top:2px}
+  .timeline button[aria-current="true"]{border-color:var(--accent)}
+  .timeline button[aria-current="true"] .tt{color:var(--ink)}
+  .timeline button .prog{position:absolute;left:0;bottom:0;height:3px;background:var(--accent);width:0}
+  @media(max-width:720px){.timeline{grid-template-columns:repeat(3,1fr)}}
+
+  .controls{display:flex;gap:8px;align-items:center;margin-top:14px;flex-wrap:wrap}
+  .controls button{font-family:var(--font-sans);font-size:14px;font-weight:600;color:var(--ink);background:var(--surface);border:1px solid var(--line-2);border-radius:9px;padding:9px 14px;cursor:pointer;display:inline-flex;align-items:center;gap:7px}
+  .controls button:hover{border-color:var(--accent)}
+  .controls button.primary{background:var(--accent);color:var(--on);border-color:var(--accent)}
+  .controls .spacer{flex:1}
+  .controls .speed{font-family:var(--font-mono);font-size:12px;color:var(--ink-3)}
+  .controls .speed button{padding:6px 9px;font-size:12px;font-family:var(--font-mono)}
+
+  .legend{margin-top:20px;border-top:1px solid var(--line);padding-top:16px}
+  .legend .lt{font-family:var(--font-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-3);margin-bottom:9px}
+  .legend .row{display:flex;gap:14px;flex-wrap:wrap}
+  .legend .item{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--ink-2)}
+  .legend .sw{width:12px;height:12px;border-radius:50%;background:var(--c)}
+  .legend .item b{color:var(--ink);font-weight:600}
+
+  .note{margin-top:20px;color:var(--ink-3);font-size:13px;max-width:80ch}
+  .note b{color:var(--ink-2)}
+  a{color:var(--accent)}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap" style="padding-bottom:0">
+    <p class="eyebrow">California Water Boards · Conceptual animation · Working draft</p>
+    <h1>How freshwater harmful algal blooms develop</h1>
+    <p class="sub">The same drivers act in streams, rivers, and reservoirs — but the outcome depends on <b>residence time</b>, the length of time water lingers. As flow slows and water sits longer, nutrients and warmth tip the system into a bloom. Each stage is tagged with the Water Board program whose authority bears on it.</p>
+
+    <div class="types" role="group" aria-label="Waterbody type">
+      <button data-type="stream" aria-pressed="false">Stream<span class="rt">short residence</span></button>
+      <button data-type="river" aria-pressed="false">River<span class="rt">moderate</span></button>
+      <button data-type="reservoir" aria-pressed="true">Reservoir / lake<span class="rt">long residence</span></button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" style="padding-top:0">
+  <div class="stage">
+    <canvas id="scene" aria-label="Cross-section animation of a freshwater body developing a harmful algal bloom."></canvas>
+    <div class="hud hud-res">
+      <div class="lab">Residence time</div>
+      <div id="resWord" style="font-weight:600;color:var(--ink)">Long</div>
+      <div class="bar"><div class="fill" id="resFill"></div></div>
+      <div class="lab" id="resNote" style="margin-top:5px;max-width:150px;white-space:normal;line-height:1.3">high bloom potential; surface scums</div>
+    </div>
+    <div class="caption">
+      <div class="st">
+        <span class="snum" id="capNum">STAGE 1 / 6</span>
+        <span class="stitle" id="capTitle">Reference condition</span>
+        <span class="chips" id="capChips"></span>
+      </div>
+      <p class="stext" id="capText">Flowing water, low nutrients, cool temperatures.</p>
+    </div>
+  </div>
+
+  <div class="timeline" id="timeline"></div>
+
+  <div class="controls">
+    <button class="primary" id="playBtn" aria-label="Play or pause">▶ Play</button>
+    <button id="restartBtn">↻ Restart</button>
+    <button id="prevBtn" aria-label="Previous stage">◀ Prev</button>
+    <button id="nextBtn" aria-label="Next stage">Next ▶</button>
+    <span class="spacer"></span>
+    <span class="speed">speed
+      <button data-speed="0.5">0.5×</button>
+      <button data-speed="1" aria-pressed="true">1×</button>
+      <button data-speed="2">2×</button>
+    </span>
+  </div>
+
+  <div class="legend">
+    <div class="lt">Water Board programs</div>
+    <div class="row">
+      <span class="item" style="--c:var(--e-region)"><span class="sw"></span><b>Regional Boards</b> — Basin Plans, objectives</span>
+      <span class="item" style="--c:var(--e-rights)"><span class="sw"></span><b>Water Rights</b> — flow &amp; residence time</span>
+      <span class="item" style="--c:var(--e-dw)"><span class="sw"></span><b>Drinking Water</b> — source &amp; tap</span>
+      <span class="item" style="--c:var(--e-wq)"><span class="sw"></span><b>Water Quality</b> — criteria &amp; policy</span>
+      <span class="item" style="--c:var(--e-oima)"><span class="sw"></span><b>OIMA</b> — monitoring &amp; notice</span>
+      <span class="item" style="--c:var(--e-opeeta)"><span class="sw"></span><b>OPEETA</b> — tribal liaison, CUL</span>
+    </div>
+  </div>
+
+  <p class="note"><b>Reading the animation.</b> Cells are always present; a bloom is a matter of degree. In fast, well-flushed streams the same nutrients tend to express as <b>benthic mats</b> on the bed rather than open-water scums; in long-residence reservoirs they accumulate as <b>planktonic surface scums</b>. Residence time is the variable the Boards most directly influence, through flow. This is a simplified schematic, not to scale.</p>
+  <p class="note" style="margin-top:8px">See also: <a href="https://ggearheart.github.io/HAB-Coordination-Strategy/">the shared-jurisdiction model</a> — how the Regions, Divisions, OIMA, and OPEETA relate to HABs.</p>
+</main>
+
+<script>
+(function(){
+  "use strict";
+  var W0=960, H0=520;            // world (drawing) coordinates
+  var WT=150;                    // water surface y
+  var BANKX=150;                 // left bank width / water left edge
+  var SUN={x:858,y:82};
+
+  var canvas=document.getElementById('scene');
+  var ctx=canvas.getContext('2d');
+  var dpr=Math.max(1,Math.min(3,window.devicePixelRatio||1));
+  var cssW=0, scale=1;
+
+  function resize(){
+    cssW=canvas.clientWidth||canvas.parentNode.clientWidth;
+    var cssH=cssW*H0/W0;
+    canvas.style.height=cssH+'px';
+    canvas.width=Math.round(cssW*dpr);
+    canvas.height=Math.round(cssH*dpr);
+    scale=cssW/W0*dpr;
+    ctx.setTransform(scale,0,0,scale,0,0);
+  }
+
+  // ---- theme-aware palette ----
+  var pal={};
+  function cssv(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+  function refreshPalette(){
+    ['--c-sky1','--c-sky2','--c-water1','--c-water2','--c-earth','--c-earth2',
+     '--c-algae','--c-scum','--c-nutrient','--c-toxin','--c-arrow',
+     '--ink','--ink-2','--ink-3','--surface','--line','--e-oima','--e-region']
+     .forEach(function(k){ pal[k]=cssv(k); });
+  }
+
+  // ---- waterbody parameters ----
+  var TYPES={
+    stream:    {bedY:298, flow:1.00, plankMax:0.18, benthicMax:1.00, strat:false, res:0.15,
+                resWord:'Short', resNote:'high flushing; mats on the bed, few open-water cells'},
+    river:     {bedY:378, flow:0.52, plankMax:0.55, benthicMax:0.72, strat:false, res:0.48,
+                resWord:'Moderate', resNote:'slower reaches and pools; mixed planktonic and benthic'},
+    reservoir: {bedY:470, flow:0.09, plankMax:1.00, benthicMax:0.30, strat:true,  res:0.95,
+                resWord:'Long', resNote:'stratified, poorly flushed; planktonic surface scums'}
+  };
+  var curType='reservoir';
+
+  // ---- stages ----
+  var STAGES=[
+    {title:'Reference condition', text:'Flowing water, low nutrients, cool temperatures. Cyanobacteria are present but dilute.', chips:[]},
+    {title:'Nutrient loading', text:'Runoff and discharges deliver nitrogen and phosphorus — the fuel supply for growth.', chips:[['Regions','region'],['Water Quality','wq']]},
+    {title:'Warming & reduced flushing', text:'Rising temperature and longer residence time slow mixing and let conditions concentrate.', chips:[['Water Rights','rights']]},
+    {title:'Proliferation', text:'Cyanobacteria multiply — as planktonic cells in slow water, as benthic mats where flow persists.', chips:[]},
+    {title:'Toxins & exposure', text:'Dense biomass produces cyanotoxins; recreational, drinking-water, and cultural exposure follow.', chips:[['Regions','region'],['Drinking Water','dw'],['OPEETA','opeeta']]},
+    {title:'Monitoring & notification', text:'Partners sample and confirm the bloom; the public is notified of the hazard near the water.', chips:[['OIMA','oima']]}
+  ];
+  var NST=STAGES.length;
+  var STAGE_DUR=3.2;             // seconds per stage at 1x
+
+  // ---- particles ----
+  var MAXP=240, cells=[];
+  for(var i=0;i<MAXP;i++){
+    cells.push({xn:Math.random(), yn:Math.pow(Math.random(),1.25), r:1.7+Math.random()*2.4,
+                ph:Math.random()*6.283, sp:0.6+Math.random()*1.1});
+  }
+  var MATN=26, mats=[];
+  for(var m=0;m<MATN;m++){ mats.push({xn:m/(MATN-1), w:12+Math.random()*16, h:0.5+Math.random()*0.9, ph:Math.random()*6.283}); }
+  var nuts=[];                    // runoff nutrient dots
+  for(var n=0;n<28;n++){ nuts.push({t:Math.random(), sp:0.25+Math.random()*0.35, off:(Math.random()-0.5)*14}); }
+
+  // ---- state ----
+  var phase=0, playing=false, speed=1, lastT=0, flowAcc=0;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function smooth(a,b,x){ if(a===b) return x>=b?1:0; var t=Math.min(1,Math.max(0,(x-a)/(b-a))); return t*t*(3-2*t); }
+  function mixc(c1,c2,t){ // hex mix
+    function h(c){c=c.replace('#','');if(c.length===3)c=c[0]+c[0]+c[1]+c[1]+c[2]+c[2];return [parseInt(c.substr(0,2),16),parseInt(c.substr(2,2),16),parseInt(c.substr(4,2),16)];}
+    var a=h(c1),b=h(c2); return 'rgb('+Math.round(a[0]+(b[0]-a[0])*t)+','+Math.round(a[1]+(b[1]-a[1])*t)+','+Math.round(a[2]+(b[2]-a[2])*t)+')';
+  }
+
+  function signals(){
+    var p=phase, T=TYPES[curType];
+    var nutrient=smooth(1,1.85,p);
+    var warmth=smooth(2,2.85,p);
+    var bloomRaw=smooth(2.4,4.0,p);
+    return {
+      p:p, nutrient:nutrient, warmth:warmth,
+      plank:bloomRaw*T.plankMax, benthic:bloomRaw*T.benthicMax,
+      toxin:smooth(3.5,4.25,p), monitor:smooth(4.55,5.2,p),
+      flow:T.flow*(1-0.45*warmth)
+    };
+  }
+
+  function draw(){
+    var T=TYPES[curType], s=signals(), bedY=T.bedY, waterH=bedY-WT;
+    ctx.clearRect(0,0,W0,H0);
+
+    // sky
+    var sky=ctx.createLinearGradient(0,0,0,WT);
+    sky.addColorStop(0,pal['--c-sky1']); sky.addColorStop(1,pal['--c-sky2']);
+    ctx.fillStyle=sky; ctx.fillRect(0,0,W0,WT);
+
+    // sun + warmth rays
+    ctx.save();
+    var rays=6+Math.round(s.warmth*8), rlen=10+s.warmth*26;
+    ctx.strokeStyle=mixc(pal['--c-sky2'],'#e8b23a',0.4+0.5*s.warmth); ctx.lineWidth=2.4;
+    for(var k=0;k<rays;k++){ var a=k/rays*6.283 + (reduce?0:flowAcc*0.05);
+      ctx.globalAlpha=0.35+0.5*s.warmth;
+      ctx.beginPath(); ctx.moveTo(SUN.x+Math.cos(a)*20,SUN.y+Math.sin(a)*20);
+      ctx.lineTo(SUN.x+Math.cos(a)*(20+rlen),SUN.y+Math.sin(a)*(20+rlen)); ctx.stroke(); }
+    ctx.globalAlpha=1;
+    ctx.fillStyle=mixc('#f2c94c','#e8892b',s.warmth); ctx.beginPath(); ctx.arc(SUN.x,SUN.y,17,0,6.283); ctx.fill();
+    ctx.restore();
+
+    // water body
+    var wtop=mixc(pal['--c-water1'],pal['--c-algae'],s.plank*0.5);
+    var wbot=mixc(pal['--c-water2'],pal['--c-algae'],s.plank*0.28);
+    var wg=ctx.createLinearGradient(0,WT,0,bedY);
+    wg.addColorStop(0,wtop); wg.addColorStop(1,wbot);
+    ctx.fillStyle=wg; ctx.fillRect(BANKX,WT,W0-BANKX,waterH);
+
+    // stratification (reservoir): warm epilimnion + thermocline
+    if(T.strat && s.warmth>0.05){
+      var thermo=WT+waterH*0.42;
+      ctx.globalAlpha=0.16*s.warmth; ctx.fillStyle=mixc(pal['--c-water1'],'#e8b23a',0.5);
+      ctx.fillRect(BANKX,WT,W0-BANKX,thermo-WT); ctx.globalAlpha=1;
+      ctx.strokeStyle=pal['--ink-3']; ctx.globalAlpha=0.35*s.warmth; ctx.lineWidth=1; ctx.setLineDash([6,5]);
+      ctx.beginPath(); ctx.moveTo(BANKX,thermo); ctx.lineTo(W0,thermo); ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha=1;
+      ctx.font='italic 11px '+getComputedStyle(document.body).fontFamily; ctx.fillStyle=pal['--ink-3'];
+      ctx.globalAlpha=0.7*s.warmth; ctx.fillText('thermocline', W0-96, thermo-6); ctx.globalAlpha=1;
+    }
+
+    // flow chevrons
+    ctx.strokeStyle=pal['--c-arrow']; ctx.lineWidth=2.2;
+    var flowA=0.14+0.5*Math.min(1,s.flow*1.4);
+    var levels=[WT+waterH*0.28, WT+waterH*0.6];
+    for(var li=0; li<levels.length; li++){
+      var yy=levels[li];
+      for(var cx=0;cx<5;cx++){
+        var baseX=BANKX+30 + ((cx*190 + (reduce?0:flowAcc*40*(0.3+s.flow))) % (W0-BANKX-40));
+        ctx.globalAlpha=flowA;
+        ctx.beginPath(); ctx.moveTo(baseX,yy-5); ctx.lineTo(baseX+11,yy); ctx.lineTo(baseX,yy+5); ctx.stroke();
+      }
+    }
+    ctx.globalAlpha=1;
+
+    // benthic mats on bed
+    if(s.benthic>0.01){
+      ctx.fillStyle=mixc(pal['--c-algae'],pal['--c-scum'],0.35);
+      for(var bm=0;bm<mats.length;bm++){ var mt=mats[bm];
+        var mx=BANKX+18 + mt.xn*(W0-BANKX-36);
+        var wob=reduce?0:Math.sin(flowAcc*1.5+mt.ph)*1.5;
+        var hh=mt.h*22*s.benthic;
+        ctx.globalAlpha=0.85;
+        ctx.beginPath(); ctx.ellipse(mx, bedY-hh*0.4+wob, mt.w, hh, 0, Math.PI, 0, true); ctx.fill();
+      }
+      ctx.globalAlpha=1;
+    }
+
+    // planktonic cells
+    var count=Math.round(MAXP*s.plank);
+    ctx.fillStyle=pal['--c-algae'];
+    for(var c=0;c<count;c++){ var cell=cells[c];
+      var driftBias = T.strat ? (1-cell.yn)*0.6 : 0; // scums rise in reservoir
+      var yn = Math.max(0.02, cell.yn - driftBias*s.plank*0.5);
+      var x=BANKX+12 + ((cell.xn*(W0-BANKX-24) + (reduce?0:flowAcc*30*(0.2+s.flow))) % (W0-BANKX-24));
+      var y=WT+8 + yn*(waterH-16) + (reduce?0:Math.sin(flowAcc*cell.sp+cell.ph)*2.2);
+      ctx.globalAlpha=0.55+0.4*s.plank;
+      ctx.beginPath(); ctx.arc(x,y,cell.r,0,6.283); ctx.fill();
+    }
+    ctx.globalAlpha=1;
+
+    // surface scum band (mostly reservoir/river)
+    if(s.plank>0.15){
+      var scumT=s.plank*(T.strat?1:0.5);
+      ctx.fillStyle=pal['--c-scum']; ctx.globalAlpha=0.7*scumT;
+      ctx.beginPath(); ctx.moveTo(BANKX,WT);
+      for(var sx=BANKX; sx<=W0; sx+=18){ var wob2=reduce?0:Math.sin(sx*0.05+flowAcc*1.2)*2; ctx.lineTo(sx, WT+wob2); }
+      ctx.lineTo(W0,WT+9*scumT+4);
+      for(var sx2=W0; sx2>=BANKX; sx2-=18){ ctx.lineTo(sx2, WT+9*scumT+4+(reduce?0:Math.sin(sx2*0.05+flowAcc)*2)); }
+      ctx.closePath(); ctx.fill(); ctx.globalAlpha=1;
+    }
+
+    // earth: left bank + bed
+    ctx.fillStyle=pal['--c-earth'];
+    ctx.beginPath(); ctx.moveTo(0,58); ctx.lineTo(BANKX,WT); ctx.lineTo(BANKX,H0); ctx.lineTo(0,H0); ctx.closePath(); ctx.fill();
+    ctx.fillStyle=pal['--c-earth2'];
+    ctx.beginPath(); ctx.moveTo(BANKX,bedY); ctx.lineTo(W0,bedY); ctx.lineTo(W0,H0); ctx.lineTo(BANKX,H0); ctx.closePath(); ctx.fill();
+
+    // nutrient runoff down the bank
+    if(s.nutrient>0.02){
+      ctx.fillStyle=pal['--c-nutrient'];
+      for(var nn=0;nn<nuts.length;nn++){ var nd=nuts[nn];
+        var tt=(nd.t + (reduce?0.5:flowAcc*nd.sp*0.25))%1;
+        // travel along slope (0,58)->(BANKX,WT), then a little into water
+        var ex=tt*(BANKX+120), ey;
+        if(ex<=BANKX){ ey=58+(WT-58)*(ex/BANKX)+nd.off*0.2; }
+        else { ey=WT+ (ex-BANKX)*0.12 + nd.off; }
+        ctx.globalAlpha=0.85*Math.min(1,s.nutrient*1.2)*(ex>BANKX+120?0:1);
+        ctx.beginPath(); ctx.arc(ex,ey,2.4,0,6.283); ctx.fill();
+      }
+      ctx.globalAlpha=1;
+      // label arrow
+      ctx.fillStyle=pal['--c-nutrient']; ctx.globalAlpha=0.9*s.nutrient;
+      ctx.font='600 12px '+getComputedStyle(document.body).fontFamily;
+      ctx.fillText('N · P runoff', 14, 44); ctx.globalAlpha=1;
+    }
+
+    // toxins
+    if(s.toxin>0.02){
+      var tox=Math.round(7*s.toxin);
+      for(var tx=0; tx<tox; tx++){
+        var px=BANKX+80 + (tx*97 % (W0-BANKX-120));
+        var py=WT+16 + (tx%3)*16 + (reduce?0:Math.sin(flowAcc*2+tx)*3);
+        ctx.strokeStyle=pal['--c-toxin']; ctx.globalAlpha=0.85*s.toxin; ctx.lineWidth=1.6;
+        ctx.beginPath(); ctx.arc(px,py,5,0,6.283); ctx.stroke();
+        ctx.beginPath(); ctx.arc(px,py,1.6,0,6.283); ctx.fillStyle=pal['--c-toxin']; ctx.fill();
+      }
+      ctx.globalAlpha=1;
+    }
+
+    // monitoring: advisory sign on the bank + sampling probe
+    if(s.monitor>0.02){
+      var a=Math.min(1,s.monitor*1.2);
+      ctx.globalAlpha=a;
+      // sign post
+      var postX=70, postTop=WT-64;
+      ctx.strokeStyle=pal['--ink-2']; ctx.lineWidth=3;
+      ctx.beginPath(); ctx.moveTo(postX,WT+2); ctx.lineTo(postX,postTop); ctx.stroke();
+      ctx.fillStyle=pal['--e-oima'];
+      ctx.beginPath(); ctx.moveTo(postX,postTop-2); ctx.lineTo(postX+30,postTop-2); ctx.lineTo(postX+30,postTop-30); ctx.lineTo(postX,postTop-30); ctx.closePath(); ctx.fill();
+      ctx.fillStyle=pal['--ink']; ctx.font='700 9px '+getComputedStyle(document.body).fontFamily;
+      ctx.fillText('ADVISORY',postX+1,postTop-13);
+      // sampling probe from surface
+      ctx.strokeStyle=pal['--e-oima']; ctx.setLineDash([5,4]); ctx.lineWidth=2;
+      ctx.beginPath(); ctx.moveTo(W0-140,WT-30); ctx.lineTo(W0-140,WT+waterH*0.5); ctx.stroke(); ctx.setLineDash([]);
+      ctx.fillStyle=pal['--e-oima']; ctx.beginPath(); ctx.arc(W0-140,WT+waterH*0.5,4,0,6.283); ctx.fill();
+      ctx.globalAlpha=1;
+    }
+
+    // water surface line
+    ctx.strokeStyle=mixc(pal['--c-water2'],pal['--ink-3'],0.2); ctx.globalAlpha=0.5; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(BANKX,WT); ctx.lineTo(W0,WT); ctx.stroke(); ctx.globalAlpha=1;
+  }
+
+  // ---- UI sync ----
+  var capNum=document.getElementById('capNum'), capTitle=document.getElementById('capTitle'),
+      capText=document.getElementById('capText'), capChips=document.getElementById('capChips'),
+      resWord=document.getElementById('resWord'), resFill=document.getElementById('resFill'),
+      resNote=document.getElementById('resNote');
+  var tl=document.getElementById('timeline');
+  STAGES.forEach(function(st,idx){
+    var b=document.createElement('button');
+    b.innerHTML='<span class="tn">STAGE '+(idx+1)+'</span><span class="tt">'+st.title+'</span><span class="prog"></span>';
+    b.addEventListener('click',function(){ setPhase(idx+0.02); if(!playing) drawUI(); });
+    tl.appendChild(b);
+  });
+  var tlButtons=tl.querySelectorAll('button');
+
+  function chipHTML(chips){ if(!chips.length) return '<span class="chip" style="--c:var(--ink-3);--on:var(--surface)">physical / biological</span>';
+    return chips.map(function(c){return '<span class="chip" style="--c:var(--e-'+c[1]+')">'+c[0]+'</span>';}).join(''); }
+
+  function drawUI(){
+    var si=Math.min(NST-1,Math.floor(phase)), frac=phase-si, st=STAGES[si];
+    capNum.textContent='STAGE '+(si+1)+' / '+NST;
+    capTitle.textContent=st.title; capText.textContent=st.text; capChips.innerHTML=chipHTML(st.chips);
+    for(var i=0;i<tlButtons.length;i++){
+      tlButtons[i].setAttribute('aria-current', i===si?'true':'false');
+      var pr=tlButtons[i].querySelector('.prog');
+      pr.style.width = (i<si?100 : i===si?Math.round(frac*100) : 0)+'%';
+    }
+    var T=TYPES[curType];
+    resWord.textContent=T.resWord; resNote.textContent=T.resNote;
+    resFill.style.width=Math.round(15+T.res*80)+'%';
+  }
+
+  function setPhase(p){ phase=((p%NST)+NST)%NST; }
+
+  // ---- loop ----
+  function frame(t){
+    if(!lastT) lastT=t; var dt=Math.min(0.05,(t-lastT)/1000); lastT=t;
+    flowAcc+=dt;
+    if(playing && !reduce){ phase+=dt/STAGE_DUR*speed; if(phase>=NST) phase-=NST; }
+    else if(playing && reduce){ phase+=dt/STAGE_DUR*speed; if(phase>=NST) phase-=NST; }
+    draw(); drawUI();
+    requestAnimationFrame(frame);
+  }
+
+  // ---- controls ----
+  var playBtn=document.getElementById('playBtn');
+  function setPlaying(v){ playing=v; playBtn.textContent=v?'⏸ Pause':'▶ Play'; playBtn.setAttribute('aria-pressed',v); }
+  playBtn.addEventListener('click',function(){ setPlaying(!playing); });
+  document.getElementById('restartBtn').addEventListener('click',function(){ setPhase(0); drawUI(); });
+  document.getElementById('prevBtn').addEventListener('click',function(){ setPhase(Math.floor(phase)-1+0.02); drawUI(); });
+  document.getElementById('nextBtn').addEventListener('click',function(){ setPhase(Math.floor(phase)+1+0.02); drawUI(); });
+
+  document.querySelectorAll('.speed button').forEach(function(b){
+    b.addEventListener('click',function(){
+      speed=parseFloat(b.getAttribute('data-speed'));
+      document.querySelectorAll('.speed button').forEach(function(x){x.setAttribute('aria-pressed', x===b);});
+    });
+  });
+
+  document.querySelectorAll('.types button').forEach(function(b){
+    b.addEventListener('click',function(){
+      curType=b.getAttribute('data-type');
+      document.querySelectorAll('.types button').forEach(function(x){x.setAttribute('aria-pressed', x===b?'true':'false');});
+      drawUI();
+    });
+  });
+
+  // theme change → refresh palette
+  if(window.matchMedia){
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',refreshPalette);
+  }
+  new MutationObserver(refreshPalette).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+  window.addEventListener('resize',function(){ dpr=Math.max(1,Math.min(3,window.devicePixelRatio||1)); resize(); });
+
+  // ---- init ----
+  refreshPalette(); resize(); drawUI();
+  window.__animReady=true;
+  if(reduce){ setPlaying(false); } else { setPlaying(true); }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
